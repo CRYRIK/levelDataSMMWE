@@ -4,12 +4,10 @@ from hashlib import sha1
 level = None
 levelFile = None
 
-def loadLevel(path):
+def loadLevel(levelFile):
 	global level
-	global levelFile
-	levelFile = open(path, "r+", encoding="latin-1") # Open level from path
-	level = levelFile.read()				 		# Read From file
-	level = level[0:len(level)-40:1]			 # Delete HMAC SHA1
+	
+	level = levelFile[0:len(levelFile)-40:1]			 # Delete HMAC SHA1
 	level = base64.b64decode(level)		      # Decode Base64
 	level = json.loads(level)					# Load from string json to dict
 	
@@ -36,6 +34,8 @@ def addTubeDict(dict):
 def setTubeDict(numTube,dict):
 	level["MAIN"]["TUBERIAS"][numTube] = dict
 
+def getTubeSize():
+	return len(level["MAIN"]["TUBERIAS"])
 
 def getSettings():
 	return level["MAIN"]["AJUSTES"]
@@ -43,6 +43,8 @@ def getSettings():
 def setGround(numGround, set):
 	level["MAIN"]["SUELO"][numGround] = set
 
+def getGroundSize():
+	return len(level["MAIN"]["SUELO"])
 def addGround(dict):
 	level["MAIN"]["SUELO"].append(dict)
 
@@ -51,7 +53,15 @@ def setSettingsOnce(nameSettings, name):
 	
 def setSettingsDict(dict):
 	level["MAIN"]["AJUSTES"][0] = dict
-	
+
+def getObjectSize():
+	return len(level["MAIN"]["NIVEL"])
+def getDecoration(numDecoration):
+	return level["MAIN"]["DECORACION"][numDecoration]
+def getDecorationSize():
+	return len(level["MAIN"]["DECORACION"])
+def setDecoration(numDecoration):
+	level["MAIN"]["AJUSTES"][numDecoration] = dict			
 def saveLevel(path = ""):
 	global level
 	global levelFile
